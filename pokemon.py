@@ -176,7 +176,7 @@ while True:
                     print(f'Speed: {pkmn.speed}')
             else:
                 print('No matching Pokemon found.')
-         else:
+        else:
             print('Invalid type. Please select a type from the list.')
     else:
         print('Invalid search type. Please try again.')
