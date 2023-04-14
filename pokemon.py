@@ -30,6 +30,23 @@ class Pokedex:
             if p_type.lower() in [t.lower() for t in pkmn.type]:
                 matching_pokemon.append(pkmn)
         return matching_pokemon
+    
+    def sort_by_attack(self):
+        self.pokemon.sort(key=lambda pkmn: pkmn.attack, reverse=True)
+
+    def sort_by_defense(self):
+        self.pokemon.sort(key=lambda pkmn: pkmn.defense, reverse=True)
+
+    def sort_by_sp_attack(self):
+        self.pokemon.sort(key=lambda pkmn: pkmn.sp_attack, reverse=True)
+
+    def sort_by_sp_defense(self):
+        self.pokemon.sort(key=lambda pkmn: pkmn.sp_defense, reverse=True)
+
+    def sort_by_speed(self):
+        self.pokemon.sort(key=lambda pkmn: pkmn.speed, reverse=True)
+
+    
 
 # Create a Pokedex object
 pokedex = Pokedex('pokedex.json')
