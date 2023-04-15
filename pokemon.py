@@ -24,13 +24,13 @@ class Pokedex:
                 return pkmn
         return None
     
-    def search_by_type(self, p_type, limit=5):
+    def search_by_type(self, p_type, limit):
         matching_pokemon = []
         for pkmn in self.pokemon:
             if p_type.lower() in [t.lower() for t in pkmn.type]:
                 matching_pokemon.append(pkmn)
         matching_pokemon.sort(key=lambda pkmn: pkmn.attack, reverse=True)
-        return matching_pokemon
+        return matching_pokemon[:limit][:1]
     
     def filter_by_hp(self, min_hp=None, max_hp=None):
         filtered_pokemon = []
@@ -162,7 +162,7 @@ while True:
             max_results = None
         matching_pokemon = pokedex.search_by_type(search_p_type, limit=max_results)
         if search_p_type.lower() in [t.lower() for t in all_types]:
-            matching_pokemon = pokedex.search_by_type(search_p_type)
+            matching_pokemon = pokedex.search_by_type(search_p_type, limit=max_results)
             if matching_pokemon:
                 for pkmn in matching_pokemon:
                     print(f'ID: {pkmn.id}')
