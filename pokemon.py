@@ -1,4 +1,5 @@
 import json
+import random
 
 class Pokemon:
     def __init__(self, data):
@@ -29,8 +30,8 @@ class Pokedex:
         for pkmn in self.pokemon:
             if p_type.lower() in [t.lower() for t in pkmn.type]:
                 matching_pokemon.append(pkmn)
-        matching_pokemon.sort(key=lambda pkmn: pkmn.attack, reverse=True)
-        return matching_pokemon[:limit][:1]
+        random.shuffle(matching_pokemon)
+        return random.sample(matching_pokemon, min(limit, len(matching_pokemon)))
     
     def filter_by_hp(self, min_hp=None, max_hp=None):
         filtered_pokemon = []
