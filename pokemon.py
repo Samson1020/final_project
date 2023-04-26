@@ -1,5 +1,7 @@
 import json
 import random
+import pandas as pd
+import matplotlib.pyplot as plt 
 
 class Pokemon:
     def __init__(self, data):
@@ -123,6 +125,17 @@ class Pokedex:
     def print_all_types(self):
         all_types = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy']
         print('All types:', ', '.join(all_types))
+
+    def pokemon_visualize(pokemon):
+        pokedex_df = pd.read_csv("Pokedex.csv", "r", encoding= "iso-8859-1")
+        pokemon_df = pokedex_df.loc[pokedex_df["Name"] == pokemon]
+        col = ["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"]
+        attribute_values = pokemon_df[col].values.tolist()[0]
+        figure, ax = plt.subplots(figsize=(8,6))
+        ax.bar(col, attribute_values)
+        ax.set_xlabel("Attribute")
+        ax.set_ylabel("Value")
+        plt.show()
 
 # Create a Pokedex object
 pokedex = Pokedex('pokedex.json')
