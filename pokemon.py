@@ -230,8 +230,3 @@ while True:
                 print('Second Pokemon not found.')
         else:
             print('First Pokemon not found.')
-
-
-
-
-
