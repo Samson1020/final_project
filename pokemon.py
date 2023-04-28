@@ -136,6 +136,22 @@ class Pokedex:
         ax.set_xlabel("Attribute")
         ax.set_ylabel("Value")
         plt.show()
+    
+    def compare_stats(self, pokemon1, pokemon2):
+        p1 = self.search_by_name(pokemon1)
+        p2 = self.search_by_name(pokemon2)
+        if p1 is None or p2 is None:
+            raise ValueError("One or both Pokemon names are invalid.")
+        data = {'Pokemon': [p1.name['english'], p2.name['english']],
+                'HP': [p1.hp, p2.hp],
+                'Attack': [p1.attack, p2.attack],
+                'Defense': [p1.defense, p2.defense],
+                'Sp. Attack': [p1.sp_attack, p2.sp_attack],
+                'Sp. Defense': [p1.sp_defense, p2.sp_defense],
+                'Speed': [p1.speed, p2.speed]}
+        df = pd.DataFrame(data)
+        df = df.set_index('Pokemon')
+        return df
 
 # Create a Pokedex object
 pokedex = Pokedex('pokedex.json')
@@ -143,9 +159,9 @@ pokedex = Pokedex('pokedex.json')
 # Get all Pokemon types
 all_types = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy']
 
-# Prompt the user to search for a Pokemon by name or type
+# Prompt the user to search for a Pokemon by name, type, or compare two Pokemon
 while True:
-    search_type = input('Search by name or type? (enter "exit" to quit): ')
+    search_type = input('Search by name, type, or compare two Pokemon? (enter "exit" to quit): ')
     if search_type.lower() == 'exit':
         break
     elif search_type.lower() == 'name':
@@ -192,5 +208,30 @@ while True:
                 print('No matching Pokemon found.')
         else:
             print('Invalid type. Please select a type from the list.')
-    else:
-        print('Invalid search type. Please try again.')
+    elif search_type.lower() == 'compare':
+        # Compare two Pokemon
+        pokemon_1_name = input('Enter the name of the first Pokemon: ')
+        pokemon_1 = pokedex.search_by_name(pokemon_1_name)
+        if pokemon_1:
+            pokemon_2_name = input('Enter the name of the second Pokemon: ')
+            pokemon_2 = pokedex.search_by_name(pokemon_2_name)
+            if pokemon_2:
+                print(f'Comparison between {pokemon_1.name["english"]} and {pokemon_2.name["english"]}:')
+                print(f'{"-" * 80}')
+                print(f'{"Attribute":<20} {pokemon_1.name["english"]:>20} {pokemon_2.name["english"]:>20}')
+                print(f'{"-" * 80}')
+                print(f'{"HP":<20} {pokemon_1.hp:>20} {pokemon_2.hp:>20}')
+                print(f'{"Attack":<20} {pokemon_1.attack:>20} {pokemon_2.attack:>20}')
+                print(f'{"Defense":<20} {pokemon_1.defense:>20} {pokemon_2.defense:>20}')
+                print(f'{"Special Attack":<20} {pokemon_1.sp_attack:>20} {pokemon_2.sp_attack:>20}')
+                print(f'{"Special Defense":<20} {pokemon_1.sp_defense:>20} {pokemon_2.sp_defense:>20}')
+                print(f'{"Speed":<20} {pokemon_1.speed:>20} {pokemon_2.speed:>20}')
+            else:
+                print('Second Pokemon not found.')
+        else:
+            print('First Pokemon not found.')
+
+
+
+
+
