@@ -126,16 +126,15 @@ class Pokedex:
         all_types = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy']
         print('All types:', ', '.join(all_types))
 
-    def pokemon_visualize(name):
-        pokedex_df = pd.read_csv("Pokedex.csv")
-        pokemon_df = pokedex_df.loc[pokedex_df["name/english"] == name]
-        cols = ["base/HP", "base/Attack", "base/Defense", "base/Sp. Attack", "base/Sp. Defense", "base/Speed"]
-        attribute_values = pokemon_df[cols].values[0].tolist()
-        fig, ax = plt.subplots(figsize=(8, 6))
-        ax.bar(cols, attribute_values)
+    def pokemon_visualize(pokemon):
+        pokedex_df = pd.read_csv("Pokedex.csv", "r", encoding= "iso-8859-1")
+        pokemon_df = pokedex_df.loc[pokedex_df["Name"] == pokemon]
+        col = ["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"]
+        attribute_values = pokemon_df[col].values.tolist()[0]
+        figure, ax = plt.subplots(figsize=(8,6))
+        ax.bar(col, attribute_values)
         ax.set_xlabel("Attribute")
         ax.set_ylabel("Value")
-        ax.set_title(name)
         plt.show()
 
 # Create a Pokedex object
