@@ -136,9 +136,14 @@ class Pokedex:
     def print_all_types(self):
         all_types = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy']
         print('All types:', ', '.join(all_types))
-
-    def pokemon_visualize(name):
-        pokedex_df = pd.read_csv("Pokedex.csv")
+        
+    #Works
+    def pokemon_visualize(self, name):
+        pokedex_df = pd.read_csv("pokedex.csv")
+        pokemon = pokedex.search_by_name(name)
+        if not pokemon:
+            print('Pokemon not found.')
+            return
         pokemon_df = pokedex_df.loc[pokedex_df["name/english"] == name]
         cols = ["base/HP", "base/Attack", "base/Defense", "base/Sp. Attack", "base/Sp. Defense", "base/Speed"]
         attribute_values = pokemon_df[cols].values[0].tolist()
@@ -146,7 +151,9 @@ class Pokedex:
         ax.bar(cols, attribute_values)
         ax.set_xlabel("Attribute")
         ax.set_ylabel("Value")
-        ax.set_title(name)
+        ax.set_title(pokemon.name["english"])
+        for i, v in enumerate(attribute_values):
+            ax.text(i, v+1, str(v), ha='center', fontsize=10)
         plt.show()
 
 if __name__ == "__main__":
@@ -158,7 +165,7 @@ if __name__ == "__main__":
 
     # Prompt the user to search for a Pokemon by name, type, or compare two Pokemon
     while True:
-        search_type = input('Search by name, type, or compare (enter "exit" to quit): ')
+        search_type = input('Search by name, type, compare, or visualize (enter "exit" to quit): ')
         if search_type.lower() == 'exit':
             break
         elif search_type.lower() == 'name':
@@ -198,6 +205,10 @@ if __name__ == "__main__":
             if not pokemon2:
                 print('Pokemon not found.')
                 continue
-            pokedex.compare_pokemon(pokemon1, pokemon2)
+            pokedex.compare_pokemon(pokemon1, pokemon2)     
+        elif search_type.lower() == 'visualize':
+            # Visualize a Pokemon's attributes code
+            search_name = input('Enter name of Pokemon to visualize: ')
+            pokedex.pokemon_visualize(search_name)    
         else:
             print('Invalid search type.')
