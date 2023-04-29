@@ -126,33 +126,18 @@ class Pokedex:
         all_types = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy']
         print('All types:', ', '.join(all_types))
 
-    def pokemon_visualize(pokemon):
-        pokedex_df = pd.read_csv("Pokedex.csv", "r", encoding= "iso-8859-1")
-        pokemon_df = pokedex_df.loc[pokedex_df["Name"] == pokemon]
-        col = ["HP", "Attack", "Defense", "Sp. Atk", "Sp. Def", "Speed"]
-        attribute_values = pokemon_df[col].values.tolist()[0]
-        figure, ax = plt.subplots(figsize=(8,6))
-        ax.bar(col, attribute_values)
+    def pokemon_visualize(name):
+        pokedex_df = pd.read_csv("Pokedex.csv")
+        pokemon_df = pokedex_df.loc[pokedex_df["name/english"] == name]
+        cols = ["base/HP", "base/Attack", "base/Defense", "base/Sp. Attack", "base/Sp. Defense", "base/Speed"]
+        attribute_values = pokemon_df[cols].values[0].tolist()
+        figure, ax = plt.subplots(figsize=(8, 6))
+        ax.bar(cols, attribute_values)
         ax.set_xlabel("Attribute")
         ax.set_ylabel("Value")
+        ax.set_title(name)
         plt.show()
     
-    def compare_stats(self, pokemon1, pokemon2):
-        p1 = self.search_by_name(pokemon1)
-        p2 = self.search_by_name(pokemon2)
-        if p1 is None or p2 is None:
-            raise ValueError("One or both Pokemon names are invalid.")
-        data = {'Pokemon': [p1.name['english'], p2.name['english']],
-                'HP': [p1.hp, p2.hp],
-                'Attack': [p1.attack, p2.attack],
-                'Defense': [p1.defense, p2.defense],
-                'Sp. Attack': [p1.sp_attack, p2.sp_attack],
-                'Sp. Defense': [p1.sp_defense, p2.sp_defense],
-                'Speed': [p1.speed, p2.speed]}
-        df = pd.DataFrame(data)
-        df = df.set_index('Pokemon')
-        return df
-
 # Create a Pokedex object
 pokedex = Pokedex('pokedex.json')
 
