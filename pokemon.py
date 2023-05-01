@@ -157,6 +157,20 @@ class Pokedex:
             ax.text(i, v+1, str(v), ha='center', fontsize=10)
         plt.show()
 
+    def add_pokemon(poke_info):
+        with open('pokedex.csv', 'a+',encoding="utf-8", newline='') as csvfile:
+            read = csv.reader(csvfile)
+            write = csv.writer(csvfile)
+            last_row = None
+            for row in read:
+                last_row = row
+            if last_row is None:
+                id = 1
+            else:
+                id = int(last_row[0]) + 1
+            poke_info[0] = str(id)
+            write.writerow(poke_info)
+
     def remove_pokemon(pkm):
         df = pd.read_csv("pokedex.csv")
         df = df[df["name/english"] != pkm]
