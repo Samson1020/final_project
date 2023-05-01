@@ -6,6 +6,17 @@ import matplotlib.pyplot as plt
 class Pokemon:
     #Works
     def __init__(self, data):
+        
+        """
+        Initializes a Pokemon object with the data obtained from the JSON file.
+
+        Parameters:
+            data (dict): A dictionary containing the Pokemon's data.
+
+        Returns:
+            None
+        """
+        
         self.id = data['id']
         self.name = data['name']
         self.type = data['type']
@@ -19,12 +30,34 @@ class Pokemon:
 class Pokedex:
     #Works
     def __init__(self, file_path):
+        
+        """
+        Initializes a Pokedex object with the data obtained from the JSON file.
+
+        Parameters:
+            file_path (str): The path to the JSON file containing the Pokemon data.
+
+        Returns:
+            None
+        """
+        
         with open(file_path, 'r', encoding='utf-8') as f:
             pokemon_data = json.load(f)
         self.pokemon = [Pokemon(data) for data in pokemon_data]
         
     #Works
     def search_by_name(self, name):
+        
+        """
+        Searches for a Pokemon by name.
+
+        Parameters:
+            name (str): The name of the Pokemon to search for.
+
+        Returns:
+            (Pokemon) The Pokemon object if found, otherwise None.
+        """
+        
         for pkmn in self.pokemon:
             if pkmn.name['english'].lower() == name.lower():
                 return pkmn
@@ -32,14 +65,39 @@ class Pokedex:
     
     #Works
     def search_by_type(self, p_type, limit):
+        
+        """
+        Searches for Pokemon by type.
+
+        Parameters:
+            p_type (str): The type of Pokemon to search for.
+            limit (int): The maximum number of matching Pokemon to return.
+
+        Returns:
+            (list) A list of up to `limit` Pokemon objects that match the search criteria.
+        """
+        
         matching_pokemon = []
         for pkmn in self.pokemon:
             if p_type.lower() in [t.lower() for t in pkmn.type]:
                 matching_pokemon.append(pkmn)
         random.shuffle(matching_pokemon)
         return random.sample(matching_pokemon, min(limit, len(matching_pokemon)))
+    
     #Works
     def compare_pokemon(self, pokemon1, pokemon2):
+        
+        """
+        Compares two Pokemon based on their stats.
+
+        Parameters:
+            pokemon1 (Pokemon): The first Pokemon to compare.
+            pokemon2 (Pokemon): The second Pokemon to compare.
+
+        Returns:
+            None
+        """
+        
         print(f"Comparing {pokemon1.name['english']} and {pokemon2.name['english']}...\n")
         stats_to_compare = ['hp', 'attack', 'defense', 'sp_attack', 'sp_defense', 'speed']
         for stat in stats_to_compare:
@@ -49,8 +107,23 @@ class Pokedex:
                 print(f"{pokemon2.name['english']} has higher {stat}: {getattr(pokemon2, stat)} vs {getattr(pokemon1, stat)}")
             else:
                 print(f"{pokemon1.name['english']} and {pokemon2.name['english']} have the same {stat}: {getattr(pokemon1, stat)}")
+                
     #Works
     def pokemon_visualize(self, name):
+        
+        """
+        Visualizes the base attributes of a given Pokémon using a bar chart.
+        
+        Parameters:
+            name (str): The name of the Pokémon to visualize.
+        
+        Returns:
+            None
+        
+        Raises:
+            None
+        """
+        
         pokedex_df = pd.read_csv("pokedex.csv")
         pokemon = pokedex.search_by_name(name)
         if not pokemon:
@@ -69,6 +142,18 @@ class Pokedex:
         plt.show()
     
     def filter_by_hp(self, min_hp=None, max_hp=None):
+        
+        """
+        Filters the list of Pokemon by their HP values.
+    
+        Args:
+            min_hp (int, optional): The minimum HP value to filter by. Defaults to None.
+            max_hp (int, optional): The maximum HP value to filter by. Defaults to None.
+        
+        Returns:
+            list: A list of Pokemon objects that meet the specified HP filtering criteria.
+        """
+        
         filtered_pokemon = []
         for pkmn in self.pokemon:
             if min_hp is not None and pkmn.hp < min_hp:
@@ -79,6 +164,18 @@ class Pokedex:
         return filtered_pokemon
     
     def filter_by_attack(self, min_attack=None, max_attack=None):
+        
+        """
+        Filters the list of Pokemon by their Attack values.
+    
+        Args:
+            min_attack (int, optional): The minimum Attack value to filter by. Defaults to None.
+            max_attack (int, optional): The maximum Attack value to filter by. Defaults to None.
+        
+        Returns:
+            list: A list of Pokemon objects that meet the specified Attack filtering criteria.
+        """
+        
         filtered_pokemon = []
         for pkmn in self.pokemon:
             if min_attack is not None and pkmn.attack < min_attack:
@@ -89,6 +186,18 @@ class Pokedex:
         return filtered_pokemon
     
     def filter_by_defense(self, min_defense=None, max_defense=None):
+        
+        """
+        Filters the list of Pokemon by their Defense values.
+    
+        Args:
+            min_defense (int, optional): The minimum Defense value to filter by. Defaults to None.
+            max_defense (int, optional): The maximum Defense value to filter by. Defaults to None.
+        
+        Returns:
+            list: A list of Pokemon objects that meet the specified Defense filtering criteria.
+        """
+        
         filtered_pokemon = []
         for pkmn in self.pokemon:
             if min_defense is not None and pkmn.defense < min_defense:
@@ -99,6 +208,18 @@ class Pokedex:
         return filtered_pokemon
     
     def filter_by_sp_attack(self, min_sp_attack=None, max_sp_attack=None):
+        
+        """
+        Filters the list of Pokemon by their Special Attack values.
+    
+        Args:
+            min_sp_attack (int, optional): The minimum Special Attack value to filter by. Defaults to None.
+            max_sp_attack (int, optional): The maximum Special Attack value to filter by. Defaults to None.
+        
+        Returns:
+            list: A list of Pokemon objects that meet the specified Special Attack filtering criteria.
+        """
+        
         filtered_pokemon = []
         for pkmn in self.pokemon:
             if min_sp_attack is not None and pkmn.sp_attack < min_sp_attack:
@@ -109,6 +230,18 @@ class Pokedex:
         return filtered_pokemon
     
     def filter_by_sp_defense(self, min_sp_defense=None, max_sp_defense=None):
+        
+        """
+        Filter the list of Pokemon based on their special defense attribute.
+        
+        Args:
+            min_sp_defense (int): The minimum special defense value a Pokemon can have to be included in the filtered list.
+            max_sp_defense (int): The maximum special defense value a Pokemon can have to be included in the filtered list.
+        
+        Returns:
+            filtered_pokemon (list): A list of Pokemon objects that meet the specified filtering criteria.
+        """
+        
         filtered_pokemon = []
         for pkmn in self.pokemon:
             if min_sp_defense is not None and pkmn.sp_defense < min_sp_defense:
@@ -119,6 +252,18 @@ class Pokedex:
         return filtered_pokemon
     
     def filter_by_speed(self, min_speed, max_speed):
+        
+        """
+        Filter the list of Pokemon based on their speed attribute.
+        
+        Args:
+            min_speed (int): The minimum speed value a Pokemon can have to be included in the filtered list.
+            max_speed (int): The maximum speed value a Pokemon can have to be included in the filtered list.
+        
+        Returns:
+            matching_pokemon (list): A list of Pokemon objects that meet the specified filtering criteria.
+        """
+        
         matching_pokemon = []
         for pkmn in self.pokemon:
             if min_speed <= pkmn.speed <= max_speed:
@@ -126,36 +271,89 @@ class Pokedex:
         return matching_pokemon
     
     def sort_by_id(self):
+        
+        """
+        Sorts the list of Pokemon objects in ascending order by their ID number.
+        """
+        
         self.pokemon.sort(key=lambda pkmn: pkmn.id)
     
     def sort_by_name(self):
+        
+        """
+        Sorts the list of Pokemon objects in alphabetical order by their English name.
+        """
+        
         self.pokemon.sort(key=lambda pkmn: pkmn.name['english'])
     
     def sort_by_type(self):
+        
+        """
+        Sorts the list of Pokemon objects by their primary type, in alphabetical order.
+        """
+        
         self.pokemon.sort(key=lambda pkmn: pkmn.type[0])
     
     def sort_by_attack(self):
+        
+        """
+        Sorts the list of Pokemon objects in descending order by their base attack stat.
+        """
+        
         self.pokemon.sort(key=lambda pkmn: pkmn.attack, reverse=True)
 
     def sort_by_defense(self):
+        
+        """
+        Sorts the list of Pokemon objects in descending order by their base defense stat.
+        """
+        
         self.pokemon.sort(key=lambda pkmn: pkmn.defense, reverse=True)
 
     def sort_by_sp_attack(self):
+        
+        """
+        Sorts the list of Pokemon objects in descending order by their base special attack stat.
+        """
+        
         self.pokemon.sort(key=lambda pkmn: pkmn.sp_attack, reverse=True)
 
     def sort_by_sp_defense(self):
+        
+        """
+        Sorts the list of Pokemon objects in descending order by their base special defense stat.
+        """
+        
         self.pokemon.sort(key=lambda pkmn: pkmn.sp_defense, reverse=True)
 
     def sort_by_speed(self):
+        
+        """
+        Sorts the list of Pokemon objects in descending order by their base speed stat.
+        """
+        
         self.pokemon.sort(key=lambda pkmn: pkmn.speed, reverse=True)
 
     def get_all_types(self):
+        
+        """
+        Returns a list of all unique types of Pokémon in the collection.
+        
+        Returns:
+            list: A sorted list of all types of Pokémon in the collection.
+        """
+        
         all_types = set()
         for pkmn in self.pokemon:
             all_types.update(pkmn.type)
         return sorted(all_types)
     
     def print_all_types(self):
+        
+        """
+        Prints a list of all types of Pokémon that can be found in the collection.
+        """
+        
         all_types = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy']
         print('All types:', ', '.join(all_types))
         
