@@ -160,7 +160,7 @@ class Pokedex:
         pokemon_df = pokedex_df.loc[pokedex_df["name/english"] == name]
         cols = ["base/HP", "base/Attack", "base/Defense", "base/Sp. Attack", "base/Sp. Defense", "base/Speed"]
         attribute_values = pokemon_df[cols].values[0].tolist()
-        figure, ax = plt.subplots(figsize=(8, 6))
+        figure, ax = plt.subplots(figsize=(12, 7))
         ax.bar(cols, attribute_values)
         ax.set_xlabel("Attribute")
         ax.set_ylabel("Value")
