@@ -9,10 +9,8 @@ class Pokemon:
         
         """
         Initializes a Pokemon object with the data obtained from the JSON file.
-
         Parameters:
             data (dict): A dictionary containing the Pokemon's data.
-
         Returns:
             None
         """
@@ -33,10 +31,8 @@ class Pokedex:
         
         """
         Initializes a Pokedex object with the data obtained from the JSON file.
-
         Parameters:
             file_path (str): The path to the JSON file containing the Pokemon data.
-
         Returns:
             None
         """
@@ -47,7 +43,6 @@ class Pokedex:
         
     #Works
     def search_by_name(self, name):
-        
         """
         Searches for a Pokemon by name.
 
@@ -57,22 +52,17 @@ class Pokedex:
         Returns:
             (Pokemon) The Pokemon object if found, otherwise None.
         """
-        
-        for pkmn in self.pokemon:
-            if pkmn.name['english'].lower() == name.lower():
-                return pkmn
-        return None
+
+        return next((pkmn for pkmn in self.pokemon if pkmn.name['english'].lower() == name.lower()), None)
     
     #Works
     def search_by_type(self, p_type, limit):
         
         """
         Searches for Pokemon by type.
-
         Parameters:
             p_type (str): The type of Pokemon to search for.
             limit (int): The maximum number of matching Pokemon to return.
-
         Returns:
             (list) A list of up to `limit` Pokemon objects that match the search criteria.
         """
@@ -117,11 +107,9 @@ class Pokedex:
         
         """
         Compares two Pokemon based on their stats.
-
         Parameters:
             pokemon1 (Pokemon): The first Pokemon to compare.
             pokemon2 (Pokemon): The second Pokemon to compare.
-
         Returns:
             None
         """
