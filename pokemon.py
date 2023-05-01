@@ -85,6 +85,34 @@ class Pokedex:
         return random.sample(matching_pokemon, min(limit, len(matching_pokemon)))
     
     #Works
+    def search_by_stats(self, stat_name, stat_min, stat_max):
+        
+        """
+        Returns a random Pokemon whose stat value for the specified stat name is within the given range.
+        
+        Args:
+            stat_name (str): the name of the stat to search by, e.g. 'attack', 'defense', etc.
+            stat_min (int): the minimum value for the stat
+            stat_max (int): the maximum value for the stat
+        
+        Returns:
+            a random Pokemon object whose stat value for the specified stat name is within the given range.
+            Returns None if no Pokemon are found that meet the criteria.
+        """
+    
+        # Find all Pokemon that meet the criteria
+        matching_pokemon = []
+        for pkmn in self.pokemon:
+            stat_value = getattr(pkmn, stat_name.lower())
+            if stat_min <= stat_value <= stat_max:
+                matching_pokemon.append(pkmn)
+        if not matching_pokemon:
+            print('No Pokemon found.')
+            return None
+        # Return a random Pokemon from the list of matching Pokemon
+        return random.choice(matching_pokemon)
+    
+    #Works
     def compare_pokemon(self, pokemon1, pokemon2):
         
         """
@@ -364,12 +392,20 @@ if __name__ == "__main__":
     # Get all Pokemon types
     all_types = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy']
 
-    # Prompt the user to search for a Pokemon by name, type, or compare two Pokemon
+    # Prompt the user to search for a Pokemon by various criteria
     while True:
-        search_type = input('Search by name, type, compare, or visualize (enter "exit" to quit): ')
-        if search_type.lower() == 'exit':
+        print('\nSearch for a Pokemon by:')
+        print('  1. Name')
+        print('  2. Type')
+        print('  3. Stats')
+        print('  4. Compare two Pokemon')
+        print('  5. Visualize Pokemon attributes')
+        print('  6. Exit')
+        search_type = input('Enter the number of your selection: ')
+
+        if search_type == '6':
             break
-        elif search_type.lower() == 'name':
+        elif search_type == '1':
             # Search by name code
             search_name = input('Enter a name: ')
             pokemon = pokedex.search_by_name(search_name)
@@ -385,7 +421,7 @@ if __name__ == "__main__":
                 print(f'Speed: {pokemon.speed}')
             else:
                 print('Pokemon not found.')
-        elif search_type.lower() == 'type':
+        elif search_type == '2':
             # Search by type code
             search_type = input('Enter a type: ')
             limit = int(input('Enter the maximum number of Pokemon to return: '))
@@ -394,7 +430,23 @@ if __name__ == "__main__":
                 print(f'ID: {pokemon.id}')
                 print(f'Name: {pokemon.name["english"]}')
                 print(f'Type: {", ".join(pokemon.type)}')
-        elif search_type.lower() == 'compare':
+        elif search_type == '3':
+            # Search by stats code
+            stat_name = input('Enter a stat name (HP, Attack, Defense, Sp. Attack, Sp. Defense, Speed): ')
+            stat_min = int(input('Enter a minimum value: '))
+            stat_max = int(input('Enter a maximum value: '))
+            pokemon = pokedex.search_by_stats(stat_name, stat_min, stat_max)
+            if pokemon:
+                print(f'ID: {pokemon.id}')
+                print(f'Name: {pokemon.name["english"]}')
+                print(f'Type: {", ".join(pokemon.type)}')
+                print(f'HP: {pokemon.hp}')
+                print(f'Attack: {pokemon.attack}')
+                print(f'Defense: {pokemon.defense}')
+                print(f'Special Attack: {pokemon.sp_attack}')
+                print(f'Special Defense: {pokemon.sp_defense}')
+                print(f'Speed: {pokemon.speed}')
+        elif search_type == '4':
             # Compare two Pokemon code
             search_name1 = input('Enter name of first Pokemon: ')
             pokemon1 = pokedex.search_by_name(search_name1)
@@ -406,10 +458,8 @@ if __name__ == "__main__":
             if not pokemon2:
                 print('Pokemon not found.')
                 continue
-            pokedex.compare_pokemon(pokemon1, pokemon2)     
-        elif search_type.lower() == 'visualize':
+            pokedex.compare_pokemon(pokemon1, pokemon2)
+        elif search_type == '5':
             # Visualize a Pokemon's attributes code
             search_name = input('Enter name of Pokemon to visualize: ')
-            pokedex.pokemon_visualize(search_name)    
-        else:
-            print('Invalid search type.')
+            pokedex.pokemon_visualize(search_name)
