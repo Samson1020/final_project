@@ -169,6 +169,11 @@ class Pokedex:
             ax.text(i, v+1, str(v), ha='center', fontsize=10)
         plt.show()
 
+    def remove_pokemon(pkm):
+        df = pd.read_csv("pokedex.csv")
+        df = df[df["name/english"] != pkm]
+        df.to_csv("pokemon.csv", index=False)
+
     def get_all_types(self):
         
         """
