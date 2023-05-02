@@ -1,6 +1,8 @@
+from argparse import ArgumentParser
 import json
 import random
 import csv
+import sys
 import pandas as pd
 import matplotlib.pyplot as plt 
 
@@ -176,7 +178,7 @@ class Pokedex:
                 print(f"{pokemon1.name['english']} and {pokemon2.name['english']} have the same {stat}: {getattr(pokemon1, stat)}")
                 
     #Works
-    def pokemon_visualize(self, name):
+    def pokemon_visualize(pokedex, name):
         
         """
         Visualizes the base attributes of a given Pokémon using a bar chart.
@@ -272,9 +274,20 @@ class Pokedex:
         all_types = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy']
         print('All types:', ', '.join(all_types))
         
-if __name__ == "__main__":
+def main(filename):
+    
+    """
+    Main function for the Pokemon search program.
+
+    Parameters:
+        filename (str): The name of the JSON file containing the Pokemon data.
+
+    Returns:
+        None
+    """
+    
     # Create a Pokedex object
-    pokedex = Pokedex('pokedex.json')
+    pokedex = Pokedex(filename)
 
     # Get all Pokemon types
     all_types = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy']
@@ -350,3 +363,24 @@ if __name__ == "__main__":
             # Visualize a Pokemon's attributes code
             search_name = input('Enter name of Pokemon to visualize: ')
             pokedex.pokemon_visualize(search_name)
+
+def parse_args(arglist):
+    
+    """
+    Parse command-line arguments.
+    
+    Args:
+        arglist (list of str): a list of command-line arguments to parse.
+        
+    Returns:
+        argparse.Namespace: a namespace object with a file attribute whose value
+        is a path to a text file as described above.
+    """
+    
+    parser = ArgumentParser()
+    parser.add_argument("file", help="file of Pokemon")
+    return parser.parse_args(arglist)
+
+if __name__ == "__main__":
+    args = parse_args(sys.argv[1:])
+    main(args.file)
