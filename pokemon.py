@@ -142,18 +142,16 @@ class Pokedex:
             a random Pokemon object whose stat value for the specified stat name is within the given range.
             Returns None if no Pokemon are found that meet the criteria.
         """
-    
+        
         # Find all Pokemon that meet the criteria
-        matching_pokemon = []
-        for pkmn in self.pokemon:
-            stat_value = getattr(pkmn, stat_name.lower())
-            if stat_min <= stat_value <= stat_max:
-                matching_pokemon.append(pkmn)
+        matching_pokemon = [pkmn for pkmn in self.pokemon if stat_min <= getattr(pkmn, stat_name.lower()) <= stat_max]
+        
         if not matching_pokemon:
-            print('No Pokemon found.')
+            print("No Pokemon found.")
             return None
-        # Return a random Pokemon from the list of matching Pokemon
-        return random.choice(matching_pokemon)
+        
+        # Return the Pokemon with the highest stat value for the specified stat name
+        return max(matching_pokemon, key=lambda pkmn: getattr(pkmn, stat_name.lower()))
     
     #Works
     def compare_pokemon(self, pokemon1, pokemon2):
@@ -271,8 +269,10 @@ class Pokedex:
         Prints a list of all types of Pokémon that can be found in the collection.
         """
         
-        all_types = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy']
-        print('All types:', ', '.join(all_types))
+        all_types = set()
+        for pkmn in self.pokemon:
+            all_types |= set(pkmn.type)
+        print('All types:', ', '.join(sorted(all_types)))
         
 def main(filename):
     
