@@ -1,9 +1,30 @@
 import json
 import random
+import csv
 import pandas as pd
 import matplotlib.pyplot as plt 
 
 class Pokemon:
+    
+    """
+    A class to represent a Pokemon object.
+    
+    Attributes:
+        id (int): The unique ID of the Pokemon.
+        name (str): The name of the Pokemon.
+        type (str): The type of the Pokemon.
+        hp (int): The hit points of the Pokemon.
+        attack (int): The attack power of the Pokemon.
+        defense (int): The defense power of the Pokemon.
+        sp_attack (int): The special attack power of the Pokemon.
+        sp_defense (int): The special defense power of the Pokemon.
+        speed (int): The speed of the Pokemon.
+        
+    Methods:
+        def __init__(self, data):
+            Initializes a Pokemon object with the data obtained from the JSON file.
+    """
+    
     #Works
     def __init__(self, data):
         
@@ -26,6 +47,36 @@ class Pokemon:
         self.speed = data['base']['Speed']
 
 class Pokedex:
+    
+    """
+    A class representing a collection of Pokemon.
+
+    Attributes:
+        pokemon (list): A list of Pokemon objects.
+
+    Methods:
+        __init__(self, file_path):
+            Initializes a Pokedex object with the data obtained from the JSON file.
+
+        search_by_name(self, name):
+            Searches for a Pokemon by name.
+
+        search_by_type(self, p_type, limit):
+            Searches for Pokemon by type.
+
+        search_by_stats(self, stat_name, stat_min, stat_max):
+            Returns a random Pokemon whose stat value for the specified stat name is within the given range.
+
+        compare_pokemon(self, pokemon1, pokemon2):
+            Compares two Pokemon based on their stats.
+
+        pokemon_visualize(self, name):
+            Visualizes the base attributes of a given Pokémon using a bar chart.
+
+        add_pokemon(self, poke_info):
+            Adds a new Pokemon to the Pokedex with the provided information.
+    """
+    
     #Works
     def __init__(self, file_path):
         
@@ -158,6 +209,17 @@ class Pokedex:
         plt.show()
 
     def add_pokemon(poke_info):
+        
+        """
+        Add a new Pokemon to the pokedex.csv file.
+
+        Parameters:
+            poke_info (list): A list containing the following Pokemon information in the specified order:
+
+        Returns:
+            None
+        """
+        
         with open('pokedex.csv', 'a+',encoding="utf-8", newline='') as csvfile:
             read = csv.reader(csvfile)
             write = csv.writer(csvfile)
@@ -172,6 +234,17 @@ class Pokedex:
             write.writerow(poke_info)
 
     def remove_pokemon(pkm):
+        
+        """
+        Remove a Pokemon from the pokedex.csv file.
+
+        Parameters:
+            pkm (str): The name of the Pokemon to be removed.
+
+        Returns:
+            None
+        """
+        
         df = pd.read_csv("pokedex.csv")
         df = df[df["name/english"] != pkm]
         df.to_csv("pokemon.csv", index=False)
