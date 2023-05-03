@@ -1,11 +1,14 @@
+from argparse import ArgumentParser
 import json
 import random
+import csv
+import sys
 import pandas as pd
 import matplotlib.pyplot as plt 
 
 class Pokemon:
     #Works
-    def __init__(self, data):        
+    def __init__(self, data):
         self.id = data['id']
         self.name = data['name']
         self.type = data['type']
@@ -16,52 +19,37 @@ class Pokemon:
         self.sp_defense = data['base']['Sp. Defense']
         self.speed = data['base']['Speed']
 
-class Pokedex:
+class Pokedex: 
     #Works
-    def __init__(self, file_path):
-
+    def __init__(self, file_path): 
         with open(file_path, 'r', encoding='utf-8') as f:
             pokemon_data = json.load(f)
         self.pokemon = [Pokemon(data) for data in pokemon_data]
         
     #Works
     def search_by_name(self, name):
-        """
-        Searches for a Pokemon by name.
-
-        Parameters:
-            name (str): The name of the Pokemon to search for.
-
-        Returns:
-            (Pokemon) The Pokemon object if found, otherwise None.
-        """
-
         return next((pkmn for pkmn in self.pokemon if pkmn.name['english'].lower() == name.lower()), None)
-
     
     #Works
-    def search_by_type(self, type1, type2, limit):
+    def search_by_type(self, p_type, limit):
         matching_pokemon = []
         for pkmn in self.pokemon:
-            if type1.lower() in [t.lower() for t in pkmn.type] and type2.lower() in [t.lower() for t in pkmn.type]:
+            if p_type.lower() in [t.lower() for t in pkmn.type]:
                 matching_pokemon.append(pkmn)
         random.shuffle(matching_pokemon)
         return random.sample(matching_pokemon, min(limit, len(matching_pokemon)))
     
     #Works
     def search_by_stats(self, stat_name, stat_min, stat_max):
-        
         # Find all Pokemon that meet the criteria
-        matching_pokemon = []
-        for pkmn in self.pokemon:
-            stat_value = getattr(pkmn, stat_name.lower())
-            if stat_min <= stat_value <= stat_max:
-                matching_pokemon.append(pkmn)
+        matching_pokemon = [pkmn for pkmn in self.pokemon if stat_min <= getattr(pkmn, stat_name.lower()) <= stat_max]
+        
         if not matching_pokemon:
-            print('No Pokemon found.')
+            print("No Pokemon found.")
             return None
-        # Return a random Pokemon from the list of matching Pokemon
-        return random.choice(matching_pokemon)
+        
+        # Return the Pokemon with the highest stat value for the specified stat name
+        return max(matching_pokemon, key=lambda pkmn: getattr(pkmn, stat_name.lower()))
     
     #Works
     def compare_pokemon(self, pokemon1, pokemon2):
@@ -76,7 +64,7 @@ class Pokedex:
                 print(f"{pokemon1.name['english']} and {pokemon2.name['english']} have the same {stat}: {getattr(pokemon1, stat)}")
                 
     #Works
-    def pokemon_visualize(self, name):
+    def pokemon_visualize(pokedex, name):
         pokedex_df = pd.read_csv("pokedex.csv")
         pokemon = pokedex.search_by_name(name)
         if not pokemon:
@@ -93,16 +81,40 @@ class Pokedex:
         for i, v in enumerate(attribute_values):
             ax.text(i, v+1, str(v), ha='center', fontsize=10)
         plt.show()
+    #works
+    def add_pokemon(poke_info):
+        with open('pokedex.csv', 'a+',encoding="utf-8", newline='') as csvfile:
+            read = csv.reader(csvfile)
+            write = csv.writer(csvfile)
+            last_row = None
+            for row in read:
+                last_row = row
+            if last_row is None:
+                id = 1
+            else:
+                id = int(last_row[0]) + 1
+            poke_info[0] = str(id)
+            write.writerow(poke_info)
+    #Works
+    def remove_pokemon(pkm):
+        df = pd.read_csv("pokedex.csv")
+        df = df[df["name/english"] != pkm]
+        df.to_csv("pokemon.csv", index=False)
+    #Works    
+    def get_pokemon_name(self, name):
+        for pokemon in self.pokemon:
+            if pokemon.name['english'].lower() == name.lower():
+                return {
+                    'english': pokemon.name['english'],
+                    'japanese': pokemon.name['japanese'],
+                    'chinese': pokemon.name['chinese'],
+                    'french': pokemon.name['french']
+                }
+        return None
 
-    def get_all_types(self):
-        all_types = set()
-        for pkmn in self.pokemon:
-            all_types.update(pkmn.type)
-        return sorted(all_types)
-            
-if __name__ == "__main__":
+def main(filename):
     # Create a Pokedex object
-    pokedex = Pokedex('pokedex.json')
+    pokedex = Pokedex(filename)
 
     # Prompt the user to search for a Pokemon by various criteria
     while True:
@@ -112,10 +124,13 @@ if __name__ == "__main__":
         print('  3. Stats')
         print('  4. Compare two Pokemon')
         print('  5. Visualize Pokemon attributes')
-        print('  6. Exit')
+        print('  6. Add Pokemon to Pokedex')
+        print('  7. Remove Pokemon from Pokedex')
+        print('  8. Pokemon name diffrent langauge')
+        print('  9. Exit')
         search_type = input('Enter the number of your selection: ')
 
-        if search_type == '6':
+        if search_type == '9':
             break
         elif search_type == '1':
             # Search by name code
@@ -133,35 +148,15 @@ if __name__ == "__main__":
                 print(f'Speed: {pokemon.speed}')
             else:
                 print('Pokemon not found.')
-                
         elif search_type == '2':
             # Search by type code
-            print('Search by type:')
-            print('1. Search for a specific type')
-            print('2. Search for a Pokemon with multiple types')
-            search_type_option = input('Enter your choice: ')
-            if search_type_option == '1':
-                print('Available types:', ', '.join(pokedex.get_all_types()))
-                search_type = input('Enter a type: ')
-                limit = int(input('Enter the maximum number of results to show: '))
-                matching_pokemon = pokedex.search_by_type(search_type, limit)
-                print(f'{len(matching_pokemon)} Pokemon found:')
-                for pkmn in matching_pokemon:
-                    print(f'{pkmn.name["english"]} ({" / ".join(pkmn.type)})')
-            elif search_type_option == '2':
-                all_types = pokedex.get_all_types()
-                print('Choose two types to search for Pokemon with both types:')
-                print('Available types:', ', '.join(all_types))
-                type1 = input('Enter the first type: ')
-                type2 = input('Enter the second type: ')
-                limit = int(input('Enter the maximum number of results to show: '))
-                matching_pokemon = pokedex.search_by_type(type1, type2, limit)
-                print(f'{len(matching_pokemon)} Pokemon found:')
-                for pkmn in matching_pokemon:
-                    print(f'{pkmn.name["english"]} ({" / ".join(pkmn.type)})')
-            else:
-                print('Invalid choice. Please enter 1 or 2.')    
-     
+            search_type = input('Enter a type: ')
+            limit = int(input('Enter the maximum number of Pokemon to return: '))
+            pokemon_list = pokedex.search_by_type(search_type, limit)
+            for pokemon in pokemon_list:
+                print(f'ID: {pokemon.id}')
+                print(f'Name: {pokemon.name["english"]}')
+                print(f'Type: {", ".join(pokemon.type)}')
         elif search_type == '3':
             # Search by stats code
             stat_name = input('Enter a stat name (HP, Attack, Defense, Sp. Attack, Sp. Defense, Speed): ')
@@ -178,7 +173,6 @@ if __name__ == "__main__":
                 print(f'Special Attack: {pokemon.sp_attack}')
                 print(f'Special Defense: {pokemon.sp_defense}')
                 print(f'Speed: {pokemon.speed}')
-                
         elif search_type == '4':
             # Compare two Pokemon code
             search_name1 = input('Enter name of first Pokemon: ')
@@ -192,8 +186,34 @@ if __name__ == "__main__":
                 print('Pokemon not found.')
                 continue
             pokedex.compare_pokemon(pokemon1, pokemon2)
-            
         elif search_type == '5':
             # Visualize a Pokemon's attributes code
             search_name = input('Enter name of Pokemon to visualize: ')
             pokedex.pokemon_visualize(search_name)
+        elif search_type == '6':
+            search_name3 = input('Enter pokemon attributes in a list [] with (id (empty string),name/english, name other language optional (japanese,chinese,french),type/0,type/1,base/HP,base/Attack,base/Defense,base/Sp. Attack,base/Sp. Defense,base/Speed)')
+            pokedex.add_pokemon(search_name3)
+        elif search_type == '7':
+            search_name4 = input('Enter pokemon name for delection')
+            pokedex.remove_pokemon(search_name4)
+        elif search_type == '8':
+            name = input('Enter a Pokemon name in English: ')
+            pokemon_data = pokedex.get_pokemon_name(name)
+            if pokemon_data is not None:
+                print(f"Japanese: {pokemon_data['japanese']}")
+                print(f"Chinese: {pokemon_data['chinese']}")
+                print(f"French: {pokemon_data['french']}")
+            else:
+                print(f"{name} not found in the data.")
+
+
+        
+            
+def parse_args(arglist):
+    parser = ArgumentParser()
+    parser.add_argument("file", help="file of Pokemon")
+    return parser.parse_args(arglist)
+
+if __name__ == "__main__":
+    args = parse_args(sys.argv[1:])
+    main(args.file)
