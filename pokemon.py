@@ -305,7 +305,7 @@ def main(filename):
         print('  8. Exit')
         search_type = input('Enter the number of your selection: ')
 
-        if search_type == '6':
+        if search_type == '8':
             break
         elif search_type == '1':
             # Search by name code
