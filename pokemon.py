@@ -2,6 +2,7 @@ import json
 import random
 import pandas as pd
 import matplotlib.pyplot as plt 
+import csv
 
 class Pokemon:
     #Works
