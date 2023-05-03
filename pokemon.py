@@ -5,7 +5,6 @@ import csv
 import sys
 import pandas as pd
 import matplotlib.pyplot as plt 
-import csv
 
 class Pokemon:
     
