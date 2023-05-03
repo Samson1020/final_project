@@ -207,7 +207,7 @@ class Pokedex:
         for i, v in enumerate(attribute_values):
             ax.text(i, v+1, str(v), ha='center', fontsize=10)
         plt.show()
-
+    #Works
     def add_pokemon(poke_info):
         
         """
@@ -232,7 +232,7 @@ class Pokedex:
                 id = int(last_row[0]) + 1
             poke_info[0] = str(id)
             write.writerow(poke_info)
-
+    #Works
     def remove_pokemon(pkm):
         
         """
@@ -274,6 +274,18 @@ class Pokedex:
             all_types |= set(pkmn.type)
         print('All types:', ', '.join(sorted(all_types)))
         
+    #Works    
+    def get_pokemon_name(self, name):
+        for pokemon in self.pokemon:
+            if pokemon.name['english'].lower() == name.lower():
+                return {
+                    'english': pokemon.name['english'],
+                    'japanese': pokemon.name['japanese'],
+                    'chinese': pokemon.name['chinese'],
+                    'french': pokemon.name['french']
+                }
+        return None
+#Works        
 def main(filename):
     
     """
@@ -289,9 +301,6 @@ def main(filename):
     # Create a Pokedex object
     pokedex = Pokedex(filename)
 
-    # Get all Pokemon types
-    all_types = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy']
-
     # Prompt the user to search for a Pokemon by various criteria
     while True:
         print('\nSearch for a Pokemon by:')
@@ -302,10 +311,11 @@ def main(filename):
         print('  5. Visualize Pokemon attributes')
         print('  6. Add Pokemon to Pokedex')
         print('  7. Remove Pokemon from Pokedex')
-        print('  8. Exit')
+        print('  8. Pokemon name diffrent langauge')
+        print('  9. Exit')
         search_type = input('Enter the number of your selection: ')
 
-        if search_type == '8':
+        if search_type == '9':
             break
         elif search_type == '1':
             # Search by name code
@@ -371,7 +381,17 @@ def main(filename):
         elif search_type == '7':
             search_name4 = input('Enter pokemon name for delection')
             pokedex.remove_pokemon(search_name4)
+        elif search_type == '8':
+            name = input('Enter a Pokemon name in English: ')
+            pokemon_data = pokedex.get_pokemon_name(name)
+            if pokemon_data is not None:
+                print(f"Japanese: {pokemon_data['japanese']}")
+                print(f"Chinese: {pokemon_data['chinese']}")
+                print(f"French: {pokemon_data['french']}")
+            else:
+                print(f"{name} not found in the data.")
 
+#Works
 def parse_args(arglist):
     
     """
