@@ -300,7 +300,9 @@ def main(filename):
         print('  3. Stats')
         print('  4. Compare two Pokemon')
         print('  5. Visualize Pokemon attributes')
-        print('  6. Exit')
+        print('  6. Add Pokemon to Pokedex')
+        print('  7. Remove Pokemon from Pokedex')
+        print('  8. Exit')
         search_type = input('Enter the number of your selection: ')
 
         if search_type == '6':
@@ -363,6 +365,12 @@ def main(filename):
             # Visualize a Pokemon's attributes code
             search_name = input('Enter name of Pokemon to visualize: ')
             pokedex.pokemon_visualize(search_name)
+        elif search_type == '6':
+            search_name3 = input('Enter pokemon attributes in a list [] with (id (empty string),name/english, name other language optional (japanese,chinese,french),type/0,type/1,base/HP,base/Attack,base/Defense,base/Sp. Attack,base/Sp. Defense,base/Speed)')
+            pokedex.add_pokemon(search_name3)
+        elif search_type == '7':
+            search_name4 = input('Enter pokemon name for delection')
+            pokedex.remove_pokemon(search_name4)
 
 def parse_args(arglist):
     
