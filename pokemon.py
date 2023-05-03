@@ -1,10 +1,33 @@
+from argparse import ArgumentParser
 import json
 import random
+import csv
+import sys
 import pandas as pd
 import matplotlib.pyplot as plt 
 import csv
 
 class Pokemon:
+    
+    """
+    A class to represent a Pokemon object.
+    
+    Attributes:
+        id (int): The unique ID of the Pokemon.
+        name (str): The name of the Pokemon.
+        type (str): The type of the Pokemon.
+        hp (int): The hit points of the Pokemon.
+        attack (int): The attack power of the Pokemon.
+        defense (int): The defense power of the Pokemon.
+        sp_attack (int): The special attack power of the Pokemon.
+        sp_defense (int): The special defense power of the Pokemon.
+        speed (int): The speed of the Pokemon.
+        
+    Methods:
+        def __init__(self, data):
+            Initializes a Pokemon object with the data obtained from the JSON file.
+    """
+    
     #Works
     def __init__(self, data):
         
@@ -27,6 +50,36 @@ class Pokemon:
         self.speed = data['base']['Speed']
 
 class Pokedex:
+    
+    """
+    A class representing a collection of Pokemon.
+
+    Attributes:
+        pokemon (list): A list of Pokemon objects.
+
+    Methods:
+        __init__(self, file_path):
+            Initializes a Pokedex object with the data obtained from the JSON file.
+
+        search_by_name(self, name):
+            Searches for a Pokemon by name.
+
+        search_by_type(self, p_type, limit):
+            Searches for Pokemon by type.
+
+        search_by_stats(self, stat_name, stat_min, stat_max):
+            Returns a random Pokemon whose stat value for the specified stat name is within the given range.
+
+        compare_pokemon(self, pokemon1, pokemon2):
+            Compares two Pokemon based on their stats.
+
+        pokemon_visualize(self, name):
+            Visualizes the base attributes of a given Pokémon using a bar chart.
+
+        add_pokemon(self, poke_info):
+            Adds a new Pokemon to the Pokedex with the provided information.
+    """
+    
     #Works
     def __init__(self, file_path):
         
@@ -90,18 +143,16 @@ class Pokedex:
             a random Pokemon object whose stat value for the specified stat name is within the given range.
             Returns None if no Pokemon are found that meet the criteria.
         """
-    
+        
         # Find all Pokemon that meet the criteria
-        matching_pokemon = []
-        for pkmn in self.pokemon:
-            stat_value = getattr(pkmn, stat_name.lower())
-            if stat_min <= stat_value <= stat_max:
-                matching_pokemon.append(pkmn)
+        matching_pokemon = [pkmn for pkmn in self.pokemon if stat_min <= getattr(pkmn, stat_name.lower()) <= stat_max]
+        
         if not matching_pokemon:
-            print('No Pokemon found.')
+            print("No Pokemon found.")
             return None
-        # Return a random Pokemon from the list of matching Pokemon
-        return random.choice(matching_pokemon)
+        
+        # Return the Pokemon with the highest stat value for the specified stat name
+        return max(matching_pokemon, key=lambda pkmn: getattr(pkmn, stat_name.lower()))
     
     #Works
     def compare_pokemon(self, pokemon1, pokemon2):
@@ -126,7 +177,7 @@ class Pokedex:
                 print(f"{pokemon1.name['english']} and {pokemon2.name['english']} have the same {stat}: {getattr(pokemon1, stat)}")
                 
     #Works
-    def pokemon_visualize(self, name):
+    def pokemon_visualize(pokedex, name):
         
         """
         Visualizes the base attributes of a given Pokémon using a bar chart.
@@ -159,6 +210,17 @@ class Pokedex:
         plt.show()
 
     def add_pokemon(poke_info):
+        
+        """
+        Add a new Pokemon to the pokedex.csv file.
+
+        Parameters:
+            poke_info (list): A list containing the following Pokemon information in the specified order:
+
+        Returns:
+            None
+        """
+        
         with open('pokedex.csv', 'a+',encoding="utf-8", newline='') as csvfile:
             read = csv.reader(csvfile)
             write = csv.writer(csvfile)
@@ -173,6 +235,17 @@ class Pokedex:
             write.writerow(poke_info)
 
     def remove_pokemon(pkm):
+        
+        """
+        Remove a Pokemon from the pokedex.csv file.
+
+        Parameters:
+            pkm (str): The name of the Pokemon to be removed.
+
+        Returns:
+            None
+        """
+        
         df = pd.read_csv("pokedex.csv")
         df = df[df["name/english"] != pkm]
         df.to_csv("pokemon.csv", index=False)
@@ -197,12 +270,25 @@ class Pokedex:
         Prints a list of all types of Pokémon that can be found in the collection.
         """
         
-        all_types = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy']
-        print('All types:', ', '.join(all_types))
+        all_types = set()
+        for pkmn in self.pokemon:
+            all_types |= set(pkmn.type)
+        print('All types:', ', '.join(sorted(all_types)))
         
-if __name__ == "__main__":
+def main(filename):
+    
+    """
+    Main function for the Pokemon search program.
+
+    Parameters:
+        filename (str): The name of the JSON file containing the Pokemon data.
+
+    Returns:
+        None
+    """
+    
     # Create a Pokedex object
-    pokedex = Pokedex('pokedex.json')
+    pokedex = Pokedex(filename)
 
     # Get all Pokemon types
     all_types = ['Normal', 'Fire', 'Water', 'Grass', 'Electric', 'Ice', 'Fighting', 'Poison', 'Ground', 'Flying', 'Psychic', 'Bug', 'Rock', 'Ghost', 'Dragon', 'Dark', 'Steel', 'Fairy']
@@ -278,3 +364,24 @@ if __name__ == "__main__":
             # Visualize a Pokemon's attributes code
             search_name = input('Enter name of Pokemon to visualize: ')
             pokedex.pokemon_visualize(search_name)
+
+def parse_args(arglist):
+    
+    """
+    Parse command-line arguments.
+    
+    Args:
+        arglist (list of str): a list of command-line arguments to parse.
+        
+    Returns:
+        argparse.Namespace: a namespace object with a file attribute whose value
+        is a path to a text file as described above.
+    """
+    
+    parser = ArgumentParser()
+    parser.add_argument("file", help="file of Pokemon")
+    return parser.parse_args(arglist)
+
+if __name__ == "__main__":
+    args = parse_args(sys.argv[1:])
+    main(args.file)
