@@ -27,15 +27,19 @@ class Pokemon:
             Initializes a Pokemon object with the data obtained from the JSON file.
     """
     
-    #Works
     def __init__(self, data):
         
         """
         Initializes a Pokemon object with the data obtained from the JSON file.
+        
         Parameters:
             data (dict): A dictionary containing the Pokemon's data.
+            
         Returns:
             None
+        
+        Primary Author:
+            Samson Mulugeta
         """
         
         self.id = data['id']
@@ -79,22 +83,29 @@ class Pokedex:
             Adds a new Pokemon to the Pokedex with the provided information.
     """
     
-    #Works
     def __init__(self, file_path):
         
         """
         Initializes a Pokedex object with the data obtained from the JSON file.
+        
         Parameters:
             file_path (str): The path to the JSON file containing the Pokemon data.
+            
         Returns:
             None
+        
+        Primary Author:
+            Samson Mulugeta
+        
+        Technique Demonstrated: 
+            with statements   
+            
         """
         
         with open(file_path, 'r', encoding='utf-8') as f:
             pokemon_data = json.load(f)
         self.pokemon = [Pokemon(data) for data in pokemon_data]
         
-    #Works
     def search_by_name(self, name):
         """
         Searches for a Pokemon by name.
@@ -104,20 +115,32 @@ class Pokedex:
 
         Returns:
             (Pokemon) The Pokemon object if found, otherwise None.
+            
+        Primary Author:
+            Samson Mulugeta
+        
+        Technique Demonstrated: 
+            Conditional expressions 
+           
         """
 
         return next((pkmn for pkmn in self.pokemon if pkmn.name['english'].lower() == name.lower()), None)
     
-    #Works
     def search_by_type(self, p_type, limit):
         
         """
         Searches for Pokemon by type.
+        
         Parameters:
             p_type (str): The type of Pokemon to search for.
             limit (int): The maximum number of matching Pokemon to return.
+            
         Returns:
             (list) A list of up to `limit` Pokemon objects that match the search criteria.
+        
+        Primary Author:
+            Samson Mulugeta
+            
         """
         
         matching_pokemon = []
@@ -127,7 +150,6 @@ class Pokedex:
         random.shuffle(matching_pokemon)
         return random.sample(matching_pokemon, min(limit, len(matching_pokemon)))
     
-    #Works
     def search_by_stats(self, stat_name, stat_min, stat_max):
         
         """
@@ -141,6 +163,13 @@ class Pokedex:
         Returns:
             a random Pokemon object whose stat value for the specified stat name is within the given range.
             Returns None if no Pokemon are found that meet the criteria.
+            
+        Primary Author:
+            Kyle Doung
+        
+        Technique Demonstrated: 
+            Optional parameters and/or keyword arguments
+              
         """
         
         # Find all Pokemon that meet the criteria
@@ -153,16 +182,24 @@ class Pokedex:
         # Return the Pokemon with the highest stat value for the specified stat name
         return max(matching_pokemon, key=lambda pkmn: getattr(pkmn, stat_name.lower()))
     
-    #Works
     def compare_pokemon(self, pokemon1, pokemon2):
         
         """
         Compares two Pokemon based on their stats.
+        
         Parameters:
             pokemon1 (Pokemon): The first Pokemon to compare.
             pokemon2 (Pokemon): The second Pokemon to compare.
+            
         Returns:
             None
+            
+        Primary Author:
+            Samson Mulugeta
+            
+        Technique Demonstrated: 
+            F-strings containing expressions      
+            
         """
         
         print(f"Comparing {pokemon1.name['english']} and {pokemon2.name['english']}...\n")
@@ -175,7 +212,6 @@ class Pokedex:
             else:
                 print(f"{pokemon1.name['english']} and {pokemon2.name['english']} have the same {stat}: {getattr(pokemon1, stat)}")
                 
-    #Works
     def pokemon_visualize(pokedex, name):
         
         """
@@ -189,6 +225,14 @@ class Pokedex:
         
         Raises:
             None
+            
+            
+        Primary Author:
+            Peter Zheng
+        
+        Technique Demonstrated: 
+            visualizing data with pyplot or seaborn
+
         """
         
         pokedex_df = pd.read_csv("pokedex.csv")
@@ -207,7 +251,7 @@ class Pokedex:
         for i, v in enumerate(attribute_values):
             ax.text(i, v+1, str(v), ha='center', fontsize=10)
         plt.show()
-    #Works
+        
     def add_pokemon(poke_info):
         
         """
@@ -218,6 +262,13 @@ class Pokedex:
 
         Returns:
             None
+            
+        Primary Author:
+            Peter Zheng
+            
+        Techniques Demonstrated:
+            Sequence unpacking
+             
         """
         
         with open('pokedex.csv', 'a+',encoding="utf-8", newline='') as csvfile:
@@ -232,7 +283,7 @@ class Pokedex:
                 id = int(last_row[0]) + 1
             poke_info[0] = str(id)
             write.writerow(poke_info)
-    #Works
+  
     def remove_pokemon(pkm):
         
         """
@@ -243,6 +294,10 @@ class Pokedex:
 
         Returns:
             None
+                      
+        Primary Author:
+            Peter Zheng
+            
         """
         
         df = pd.read_csv("pokedex.csv")
@@ -256,6 +311,13 @@ class Pokedex:
         
         Returns:
             list: A sorted list of all types of Pokémon in the collection.
+            
+        Primary Author:
+            Kyle Doung
+        
+        Techniques Demonstrated:
+            set operations on sets or frozensets
+            
         """
         
         all_types = set()
@@ -267,15 +329,35 @@ class Pokedex:
         
         """
         Prints a list of all types of Pokémon that can be found in the collection.
+        
+        Primary Author:
+            Kyle Doung
+        
+        Techniques Demonstrated:
+            use of a key function: sorted 
+            
         """
         
         all_types = set()
         for pkmn in self.pokemon:
             all_types |= set(pkmn.type)
         print('All types:', ', '.join(sorted(all_types)))
-        
-    #Works    
+            
     def get_pokemon_name(self, name):
+        """
+        Searches for a Pokemon by its English name in the `self.pokemon` list and returns its name in English, Japanese, Chinese, and French.
+
+        Args:
+        - name (str): The English name of the Pokemon to search for.
+
+        Returns:
+        - (dict) A dictionary containing the name of the Pokemon in English, Japanese, Chinese, and French, if the Pokemon is found.
+        - (None) If the Pokemon is not found in the `self.pokemon` list.
+        
+        Primary Author
+            Samson Mulugeta
+        
+        """
         for pokemon in self.pokemon:
             if pokemon.name['english'].lower() == name.lower():
                 return {
@@ -285,7 +367,7 @@ class Pokedex:
                     'french': pokemon.name['french']
                 }
         return None
-#Works        
+
 def main(filename):
     
     """
@@ -296,6 +378,10 @@ def main(filename):
 
     Returns:
         None
+        
+    Primary Author: 
+        Samson Mulugeta
+    
     """
     
     # Create a Pokedex object
@@ -391,7 +477,6 @@ def main(filename):
             else:
                 print(f"{name} not found in the data.")
 
-#Works
 def parse_args(arglist):
     
     """
@@ -403,6 +488,13 @@ def parse_args(arglist):
     Returns:
         argparse.Namespace: a namespace object with a file attribute whose value
         is a path to a text file as described above.
+        
+    Primary Author:
+        Kyle Doung
+        
+    Technique Demonstrated:
+        the ArgumentParser class from the argparse module
+        
     """
     
     parser = ArgumentParser()
