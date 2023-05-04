@@ -31,13 +31,12 @@ class Pokedex:
         return next((pkmn for pkmn in self.pokemon if pkmn.name['english'].lower() == name.lower()), None)
     
     #Works
-    def search_by_type(self, p_type, limit):
-        matching_pokemon = []
-        for pkmn in self.pokemon:
-            if p_type.lower() in [t.lower() for t in pkmn.type]:
-                matching_pokemon.append(pkmn)
-        random.shuffle(matching_pokemon)
-        return random.sample(matching_pokemon, min(limit, len(matching_pokemon)))
+    def search_by_type(self, p_type, num_results):
+        matching_pokemon = [pkmn for pkmn in self.pokemon if p_type.lower() in [t.lower() for t in pkmn.type]]
+        matching_pokemon = random.sample(matching_pokemon, min(num_results, len(matching_pokemon)))
+        return matching_pokemon
+
+
     
     #Works
     def search_by_stats(self, stat_name, stat_min, stat_max):
@@ -111,7 +110,8 @@ class Pokedex:
                     'french': pokemon.name['french']
                 }
         return None
-
+    
+        
 def main(filename):
     # Create a Pokedex object
     pokedex = Pokedex(filename)
@@ -206,9 +206,6 @@ def main(filename):
             else:
                 print(f"{name} not found in the data.")
 
-
-        
-            
 def parse_args(arglist):
     parser = ArgumentParser()
     parser.add_argument("file", help="file of Pokemon")
