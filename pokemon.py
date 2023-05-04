@@ -126,29 +126,29 @@ class Pokedex:
 
         return next((pkmn for pkmn in self.pokemon if pkmn.name['english'].lower() == name.lower()), None)
     
-    def search_by_type(self, p_type, limit):
-        
-        """
-        Searches for Pokemon by type.
-        
-        Parameters:
+    def search_by_type(self, p_type, num_results=None):
+        """Return a list of Pokemon with a certain type.
+
+        Args:
             p_type (str): The type of Pokemon to search for.
-            limit (int): The maximum number of matching Pokemon to return.
-            
+            num_results (int, optional): The maximum number of results to return.
+                If not specified, return all matching Pokemon.
+
         Returns:
-            (list) A list of up to `limit` Pokemon objects that match the search criteria.
+            list: A list of Pokemon objects that have the specified type.
+                If `num_results` is specified, return at most `num_results` Pokemon.
+                If no Pokemon match the type, return an empty list.
         
         Primary Author:
             Samson Mulugeta
             
+        Technique Demonstrated: 
+            comprehensions or generator expressions 
+            
         """
-        
-        matching_pokemon = []
-        for pkmn in self.pokemon:
-            if p_type.lower() in [t.lower() for t in pkmn.type]:
-                matching_pokemon.append(pkmn)
-        random.shuffle(matching_pokemon)
-        return random.sample(matching_pokemon, min(limit, len(matching_pokemon)))
+        matching_pokemon = [pkmn for pkmn in self.pokemon if p_type.lower() in [t.lower() for t in pkmn.type]]
+        matching_pokemon = random.sample(matching_pokemon, min(num_results, len(matching_pokemon)))
+        return matching_pokemon
     
     def search_by_stats(self, stat_name, stat_min, stat_max):
         
