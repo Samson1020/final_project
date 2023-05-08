@@ -253,7 +253,7 @@ class Pokedex:
             ax.text(i, v+1, str(v), ha='center', fontsize=10)
         plt.show()
         
-    def add_pokemon(*poke_info):
+    def add_pokemon(self, poke_info):
         
         """
         Add a new Pokemon to the pokedex.csv file.
