@@ -464,7 +464,8 @@ def main(filename):
             pokedex.pokemon_visualize(search_name)
         elif search_type == '6':
             search_name3 = input('Enter pokemon attributes: (id (empty string),name/english, name other language optional (japanese,chinese,french),type/0,type/1,base/HP,base/Attack,base/Defense,base/Sp. Attack,base/Sp. Defense,base/Speed)')
-            pokedex.add_pokemon(search_name3)
+            poke_info = search_name3.split(",")
+            pokedex.add_pokemon(poke_info)
         elif search_type == '7':
             search_name4 = input('Enter pokemon name for delection')
             pokedex.remove_pokemon(search_name4)
@@ -497,12 +498,10 @@ def parse_args(arglist):
         the ArgumentParser class from the argparse module
         
     """
-    
     parser = ArgumentParser()
     parser.add_argument("file", help="file of Pokemon")
     return parser.parse_args(arglist)
     
-
 if __name__ == "__main__":
     args = parse_args(sys.argv[1:])
     main(args.file)
