@@ -463,7 +463,8 @@ def main(filename):
             pokedex.pokemon_visualize(search_name)
         elif search_type == '6':
             search_name3 = input('Enter pokemon attributes in a list [] with (id (empty string),name/english, name other language optional (japanese,chinese,french),type/0,type/1,base/HP,base/Attack,base/Defense,base/Sp. Attack,base/Sp. Defense,base/Speed)')
-            pokedex.add_pokemon(search_name3)
+            pokemon_list = eval(search_name3)
+            pokedex.add_pokemon(pokemon_list)
         elif search_type == '7':
             search_name4 = input('Enter pokemon name for delection')
             pokedex.remove_pokemon(search_name4)
