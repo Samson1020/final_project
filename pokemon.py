@@ -253,7 +253,7 @@ class Pokedex:
             ax.text(i, v+1, str(v), ha='center', fontsize=10)
         plt.show()
         
-    def add_pokemon(poke_string):
+    def add_pokemon(*poke_info):
         
         """
         Add a new Pokemon to the pokedex.csv file.
@@ -271,7 +271,6 @@ class Pokedex:
             Sequence unpacking
              
         """
-        poke_info = poke_string.split(",")
         with open('pokedex.csv', 'a+',encoding="utf-8", newline='') as csvfile:
             read = csv.reader(csvfile)
             write = csv.writer(csvfile)
