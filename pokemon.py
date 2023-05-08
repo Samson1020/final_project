@@ -5,7 +5,7 @@ import csv
 import sys
 import pandas as pd
 import matplotlib.pyplot as plt
-import ast 
+
 
 class Pokemon:
     
@@ -271,7 +271,7 @@ class Pokedex:
             Sequence unpacking
              
         """
-        
+        poke_info_str = poke_info.split()
         with open('pokedex.csv', 'a+',encoding="utf-8", newline='') as csvfile:
             read = csv.reader(csvfile)
             write = csv.writer(csvfile)
@@ -282,8 +282,8 @@ class Pokedex:
                 id = 1
             else:
                 id = int(last_row[0]) + 1
-            poke_info[0] = str(id)
-            write.writerow(poke_info)
+            poke_info_str[0] = str(id)
+            write.writerow(poke_info_str)
   
     def remove_pokemon(pkm):
         
@@ -463,10 +463,8 @@ def main(filename):
             search_name = input('Enter name of Pokemon to visualize: ')
             pokedex.pokemon_visualize(search_name)
         elif search_type == '6':
-            search_name3 = ast.literal_eval(sys.argv[1])
-            search_name3 = input('Enter pokemon attributes in a list [] with (id (empty string),name/english, name other language optional (japanese,chinese,french),type/0,type/1,base/HP,base/Attack,base/Defense,base/Sp. Attack,base/Sp. Defense,base/Speed)')
-            pokemon_list = eval(search_name3)
-            pokedex.add_pokemon(pokemon_list)
+            search_name3 = input('Enter pokemon attributes: (id (empty string),name/english, name other language optional (japanese,chinese,french),type/0,type/1,base/HP,base/Attack,base/Defense,base/Sp. Attack,base/Sp. Defense,base/Speed)')
+            pokedex.add_pokemon(search_name3)
         elif search_type == '7':
             search_name4 = input('Enter pokemon name for delection')
             pokedex.remove_pokemon(search_name4)
