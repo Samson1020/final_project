@@ -284,7 +284,7 @@ class Pokedex:
             poke_info[0] = str(id)
             write.writerow(poke_info)
   
-    def remove_pokemon(pkm):
+    def remove_pokemon(self, pkm):
         
         """
         Remove a Pokemon from the pokedex.csv file.
