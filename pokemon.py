@@ -271,7 +271,6 @@ class Pokedex:
             Sequence unpacking
              
         """
-        poke_info_str = poke_info.split()
         with open('pokedex.csv', 'a+',encoding="utf-8", newline='') as csvfile:
             read = csv.reader(csvfile)
             write = csv.writer(csvfile)
@@ -282,8 +281,8 @@ class Pokedex:
                 id = 1
             else:
                 id = int(last_row[0]) + 1
-            poke_info_str[0] = str(id)
-            write.writerow(poke_info_str)
+            poke_info[0] = str(id)
+            write.writerow(poke_info)
   
     def remove_pokemon(pkm):
         
