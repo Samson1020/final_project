@@ -271,7 +271,7 @@ class Pokedex:
             Sequence unpacking
              
         """
-        poke_info = poke_string.split()
+        poke_info = poke_string.split(",")
         with open('pokedex.csv', 'a+',encoding="utf-8", newline='') as csvfile:
             read = csv.reader(csvfile)
             write = csv.writer(csvfile)
