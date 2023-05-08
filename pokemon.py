@@ -499,7 +499,11 @@ def parse_args(arglist):
     """
     
     parser = ArgumentParser()
-    parser.add_argument("file", help="file of Pokemon")
+    subparsers = parser.add_subparsers(dest='command')
+    add_pokemon_parser = subparsers.add_parser('add_pokemon', help='add a new Pokemon')
+    add_pokemon_parser.add_argument('data', help='comma separated values for the new Pokemon in the format: name, japanese name, chinese name, french name, type 1, type 2, HP, Attack, Defense, Sp. Atk, Sp. Def, Speed')
+    subparsers.add_parser('list_pokemon', help='list all Pokemon')
+    
     return parser.parse_args(arglist)
 
 if __name__ == "__main__":
