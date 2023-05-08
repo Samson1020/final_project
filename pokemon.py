@@ -463,6 +463,7 @@ def main(filename):
             search_name = input('Enter name of Pokemon to visualize: ')
             pokedex.pokemon_visualize(search_name)
         elif search_type == '6':
+            search_name3 = ast.literal_eval(sys.argv[1])
             search_name3 = input('Enter pokemon attributes in a list [] with (id (empty string),name/english, name other language optional (japanese,chinese,french),type/0,type/1,base/HP,base/Attack,base/Defense,base/Sp. Attack,base/Sp. Defense,base/Speed)')
             pokemon_list = eval(search_name3)
             pokedex.add_pokemon(pokemon_list)
@@ -504,6 +505,5 @@ def parse_args(arglist):
     return parser.parse_args(arglist)
 
 if __name__ == "__main__":
-    search_name3 = ast.literal_eval(sys.argv[1])
     args = parse_args(sys.argv[1:])
     main(args.file)
