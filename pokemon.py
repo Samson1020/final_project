@@ -4,7 +4,8 @@ import random
 import csv
 import sys
 import pandas as pd
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+import ast 
 
 class Pokemon:
     
@@ -503,5 +504,6 @@ def parse_args(arglist):
     return parser.parse_args(arglist)
 
 if __name__ == "__main__":
+    search_name3 = ast.literal_eval(sys.argv[1])
     args = parse_args(sys.argv[1:])
     main(args.file)
