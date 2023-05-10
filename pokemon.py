@@ -271,16 +271,18 @@ class Pokedex:
             Sequence unpacking
              
         """
-        with open('pokedex.csv', 'a+',encoding="utf-8", newline='') as csvfile:
+        with open('pokedex.csv', 'a+', encoding="utf-8", newline='') as csvfile:
             read = csv.reader(csvfile)
             write = csv.writer(csvfile)
             last_row = None
             for row in read:
                 last_row = row
             if last_row is None:
+                id = 1
+            else:
                 id = int(last_row[0]) + 1
-                poke_info[0] = str(id)
-                write.writerow(poke_info)
+            poke_info[0] = str(id)
+            write.writerow(poke_info)
   
     def remove_pokemon(self, pkm):
         
