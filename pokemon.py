@@ -256,23 +256,25 @@ class Pokedex:
     def add_pokemon(self, poke_info):
         
         """
-        Add a new Pokemon to the pokedex.csv file.
+            Add a new Pokemon to the pokedex.csv file.
 
-        Parameters:
-            poke_info (list): A list containing the following Pokemon information in the specified order:
+            Parameters:
+                poke_info (list): A list containing the following Pokemon information in the specified order:
 
-        Returns:
-            None
-            
-        Primary Author:
-            Peter Zheng
-            
-        Techniques Demonstrated:
-            Sequence unpacking
-             
-        """
-        with open('pokedex.csv', 'r', encoding="utf-8", newline='') as csvfile:
+            Returns:
+                None
+                
+            Primary Author:
+                Peter Zheng
+                
+            Techniques Demonstrated:
+                Sequence unpacking
+                
+            """
+        with open('pokedex.csv', 'a+', encoding="utf-8", newline='') as csvfile:
+            csvfile.seek(0)
             reader = csv.reader(csvfile)
+            writer = csv.writer(csvfile)
             last_row = None
             for row in reader:
                 last_row = row
@@ -280,10 +282,7 @@ class Pokedex:
                 id = 1
             else:
                 id = int(last_row[0]) + 1
-
-        poke_info[0] = str(id)
-        with open('pokedex.csv', 'a', encoding="utf-8", newline='') as csvfile:
-            writer = csv.writer(csvfile)
+            poke_info[0] = str(id)
             writer.writerow(poke_info)
   
     def remove_pokemon(self, pkm):
