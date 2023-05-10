@@ -465,9 +465,11 @@ def main(filename):
             search_name3 = input('Enter pokemon attributes: (id ,name/english, name other language optional \n (japanese,chinese,french),type/0,type/1,base/HP,base/Attack,base/Defense,base/Sp. Attack,base/Sp. \n Defense,base/Speed)  ')
             poke_info = search_name3.split(",")
             pokedex.add_pokemon(poke_info)
+            print('Pokemon added')
         elif search_type == '7':
             search_name4 = input('Enter pokemon name for delection:  ')
             pokedex.remove_pokemon(search_name4)
+            print('pokemon removed')
         elif search_type == '8':
             name = input('Enter a Pokemon name in English: ')
             pokemon_data = pokedex.get_pokemon_name(name)
