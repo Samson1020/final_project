@@ -302,7 +302,7 @@ class Pokedex:
         
         df = pd.read_csv("pokedex.csv")
         df = df[df["name/english"] != pkm]
-        df.to_csv("pokemon.csv", index=False)
+        df.to_csv("pokedex.csv", index=False)
 
     def get_all_types(self):
         
