@@ -271,18 +271,20 @@ class Pokedex:
             Sequence unpacking
              
         """
-        with open('pokedex.csv', 'a+',encoding="utf-8", newline='') as csvfile:
-            read = csv.reader(csvfile)
-            write = csv.writer(csvfile)
+        with open('pokedex.csv', 'r', encoding="utf-8", newline='') as csvfile:
+            reader = csv.reader(csvfile)
             last_row = None
-            for row in read:
+            for row in reader:
                 last_row = row
             if last_row is None:
                 id = 1
             else:
                 id = int(last_row[0]) + 1
-            poke_info[0] = str(id)
-            write.writerow(poke_info)
+
+        poke_info[0] = str(id)
+        with open('pokedex.csv', 'a', encoding="utf-8", newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(poke_info)
   
     def remove_pokemon(self, pkm):
         
@@ -302,7 +304,7 @@ class Pokedex:
         
         df = pd.read_csv("pokedex.csv")
         df = df[df["name/english"] != pkm]
-        df.to_csv("pokemon.csv", index=False)
+        df.to_csv("pokedex.csv", index=False)
 
     def get_all_types(self):
         
@@ -462,7 +464,7 @@ def main(filename):
             search_name = input('Enter name of Pokemon to visualize: ')
             pokedex.pokemon_visualize(search_name)
         elif search_type == '6':
-            search_name3 = input('Enter pokemon attributes: (id ,name/english, name other language optional \n (japanese,chinese,french),type/0,type/1,base/HP,base/Attack,base/Defense,base/Sp. Attack,base/Sp. \n Defense,base/Speed) ')
+            search_name3 = input('Enter pokemon attributes begin with: (id,name/english,name other language optional \n (japanese,chinese,french),type/0,type/1,base/HP,base/Attack,base/Defense,base/Sp. Attack,base/Sp. \n Defense,base/Speed) ')
             poke_info = search_name3.split(",")
             pokedex.add_pokemon(poke_info)
         elif search_type == '7':
