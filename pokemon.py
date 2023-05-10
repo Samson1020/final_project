@@ -272,9 +272,7 @@ class Pokedex:
              
         """
         with open('pokedex.csv', 'r', encoding="utf-8", newline='') as csvfile:
-            csvfile.seek(0)
             reader = csv.reader(csvfile)
-            writer = csv.writer(csvfile)
             last_row = None
             for row in reader:
                 last_row = row
@@ -282,8 +280,10 @@ class Pokedex:
                 id = 1
             else:
                 id = int(last_row[0]) + 1
-            id = int(last_row[0]) + 1
-            poke_info[0] = str(id)
+
+        poke_info[0] = str(id)
+        with open('pokedex.csv', 'a', encoding="utf-8", newline='') as csvfile:
+            writer = csv.writer(csvfile)
             writer.writerow(poke_info)
   
     def remove_pokemon(self, pkm):
