@@ -89,11 +89,8 @@ class Pokedex:
             for row in read:
                 last_row = row
             if last_row is None:
-                id = 1
-            else:
                 id = int(last_row[0]) + 1
-            poke_info[0] = str(id)
-            write.writerow(poke_info)
+
     #Works
     def remove_pokemon(pkm):
         df = pd.read_csv("pokedex.csv")
