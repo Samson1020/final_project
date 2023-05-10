@@ -462,7 +462,7 @@ def main(filename):
             search_name = input('Enter name of Pokemon to visualize: ')
             pokedex.pokemon_visualize(search_name)
         elif search_type == '6':
-            search_name3 = input('Enter pokemon attributes: (id (empty string),name/english, name other language optional (japanese,chinese,french),type/0,type/1,base/HP,base/Attack,base/Defense,base/Sp. Attack,base/Sp. Defense,base/Speed)')
+            search_name3 = input('Enter pokemon attributes: (id (empty string),name/english, name other language optional \n (japanese,chinese,french),type/0,type/1,base/HP,base/Attack,base/Defense,base/Sp. Attack,base/Sp. \n Defense,base/Speed) ')
             poke_info = search_name3.split(",")
             pokedex.add_pokemon(poke_info)
         elif search_type == '7':
