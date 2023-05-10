@@ -272,6 +272,7 @@ class Pokedex:
              
         """
         with open('pokedex.csv', 'a+', encoding="utf-8", newline='') as csvfile:
+            csvfile.seek(0)
             read = csv.reader(csvfile)
             write = csv.writer(csvfile)
             last_row = None
