@@ -277,14 +277,9 @@ class Pokedex:
             for row in reader:
                 last_row = row
             if last_row is None:
-                id = 1
-            else:
                 id = int(last_row[0]) + 1
-
-        poke_info[0] = str(id)
-        with open('pokedex.csv', 'a', encoding="utf-8", newline='') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow(poke_info)
+            poke_info[0] = str(id)
+            write.writerow(poke_info)
   
     def remove_pokemon(self, pkm):
         
