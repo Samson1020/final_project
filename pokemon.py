@@ -383,6 +383,11 @@ def main(filename):
     Primary Author: 
         Samson Mulugeta
     
+    Outside Source:
+        pokedex.json
+        Author: fanzeyi 
+        https://github.com/fanzeyi/pokemon.json
+    
     """
     
     # Create a Pokedex object
